@@ -1,50 +1,50 @@
-# Node.js Dependencies
-node_modules/
-jspm_packages/
-src/swagger.js
+# # Node.js Dependencies
+# node_modules/
+# jspm_packages/
+# src/swagger.js
 
-# Logs
-logs/
-*.log
+# # Logs
+# logs/
+# *.log
 
-# Environment Variables
-.env
+# # Environment Variables
+# .env
 
-# Prisma
-prisma/.env
-prisma/migrations/
-prisma/dev.db
+# # Prisma
+# prisma/.env
+# prisma/migrations/
+# prisma/dev.db
 
-# Build directories
-dist/
-build/
-out/
-public/
+# # Build directories
+# dist/
+# build/
+# out/
+# public/
 
-# Temporary Files
-tmp/
-temp/
-*.tmp
-*.temp
+# # Temporary Files
+# tmp/
+# temp/
+# *.tmp
+# *.temp
 
-# OS Specific Files
-.DS_Store
-Thumbs.db
-ehthumbs.db
-Icon?
-Desktop.ini
+# # OS Specific Files
+# .DS_Store
+# Thumbs.db
+# ehthumbs.db
+# Icon?
+# Desktop.ini
 
-# IDEs and Editors
-.vscode/
-.idea/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+# # IDEs and Editors
+# .vscode/
+# .idea/
+# *.suo
+# *.ntvs*
+# *.njsproj
+# *.sln
+# *.sw?
 
-# Ignored Scripts or Secrets
-secret/
-secrets/
-*.secret.js
-*.key.js
+# # Ignored Scripts or Secrets
+# secret/
+# secrets/
+# *.secret.js
+# *.key.js
