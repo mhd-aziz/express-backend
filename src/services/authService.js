@@ -259,6 +259,34 @@ const changePassword = async (
   return { message: "Password has been successfully changed." };
 };
 
+/**
+ * Delete user account
+ * @param {Number} userId - ID of the authenticated user
+ * @returns {Object} - Success message
+ */
+const deleteAccount = async (userId) => {
+  // Cek apakah pengguna ada
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  if (!user) {
+    throw { status: 404, message: "User not found." };
+  }
+
+  // Hapus entitas PasswordReset terkait terlebih dahulu
+  await prisma.passwordReset.deleteMany({
+    where: { userId },
+  });
+
+  // Hapus pengguna dari database
+  await prisma.user.delete({
+    where: { id: userId },
+  });
+
+  return { message: "Account has been successfully deleted." };
+};
+
 module.exports = {
   registerUser,
   loginUser,
@@ -266,4 +294,5 @@ module.exports = {
   confirmOtp,
   setNewPassword,
   changePassword,
+  deleteAccount,
 };

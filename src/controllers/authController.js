@@ -108,6 +108,24 @@ const changePassword = async (req, res, next) => {
   }
 };
 
+/**
+ * Delete Account Controller
+ */
+const deleteAccount = async (req, res, next) => {
+  try {
+    const userId = req.user.userId;
+
+    const result = await authService.deleteAccount(userId);
+    res.json(result);
+  } catch (error) {
+    if (error.status && error.message) {
+      sendErrorResponse(res, error.status, error.message);
+    } else {
+      next(error);
+    }
+  }
+};
+
 module.exports = {
   register,
   login,
@@ -115,4 +133,5 @@ module.exports = {
   confirmOtp,
   setNewPassword,
   changePassword,
+  deleteAccount,
 };
