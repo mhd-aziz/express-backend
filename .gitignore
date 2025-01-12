@@ -1,5 +1,4 @@
-# Node.js Dependencies
-node_modules/
+/node_modules
 logs/
 *.log
 .env
