@@ -1,7 +1,7 @@
 node_modules/
-logs
-migrations
+logs/
+migrations/
 .env
-prisma
-.vscode
-.idea
+prisma/
+.vscode/
+.idea/
