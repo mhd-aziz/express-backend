@@ -6,20 +6,21 @@ const logger = require("../utils/logger");
  * Global Error Handling Middleware
  */
 const errorHandler = (err, req, res, next) => {
-  // Log the error details
-  logger.error(err.stack || err);
 
-  // If headers have already been sent, delegate to the default Express error handler
+  logger.error(err.stack || err, {
+    route: req.originalUrl,
+    method: req.method,
+    ip: req.ip
+  });
+
   if (res.headersSent) {
     return next(err);
   }
 
-  // Handle known errors
   if (err.status && err.message) {
     return sendErrorResponse(res, err.status, err.message);
   }
 
-  // Handle unknown errors
   sendErrorResponse(res, 500, "Internal Server Error");
 };
 

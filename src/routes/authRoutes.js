@@ -6,59 +6,18 @@ const authController = require("../controllers/authController");
 const authMiddleware = require("../middleware/authMiddleware");
 
 /**
- * @swagger
- * tags:
- *   name: Auth
- *   description: Authentication and user management
- */
-
-/**
- * @swagger
- * /register:
- *   post:
- *     summary: Register a new user
- *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - username
- *               - email
- *               - password
- *             properties:
- *               username:
- *                 type: string
- *                 example: johndoe
- *               email:
- *                 type: string
- *                 format: email
- *                 example: johndoe@example.com
- *               password:
- *                 type: string
- *                 format: password
- *                 example: StrongP@ssw0rd
- *     responses:
- *       201:
- *         description: User successfully registered
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: User successfully registered.
- *       400:
- *         description: Validation failed or user already exists
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *       500:
- *         description: Server error
+ * @api {post} /auth/register Register a new user
+ * @apiName RegisterUser
+ * @apiGroup Auth
+ *
+ * @apiParam (Body) {String} username Username of the user.
+ * @apiParam (Body) {String} email Email of the user.
+ * @apiParam (Body) {String} password Password of the user.
+ *
+ * @apiSuccess (201) {String} message User successfully registered.
+ *
+ * @apiError (400) {String} error Validation failed or user already exists.
+ * @apiError (500) {String} error Server error.
  */
 router.post(
   "/register",
@@ -75,44 +34,17 @@ router.post(
 );
 
 /**
- * @swagger
- * /login:
- *   post:
- *     summary: Login a user
- *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - email
- *               - password
- *             properties:
- *               email:
- *                 type: string
- *               password:
- *                 type: string
- *     responses:
- *       200:
- *         description: Successfully logged in and returns JWT token
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 token:
- *                   type: string
- *                   example: your_jwt_token_here
- *       400:
- *         description: Invalid email or password
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *       500:
- *         description: Server error
+ * @api {post} /auth/login Login a user
+ * @apiName LoginUser
+ * @apiGroup Auth
+ *
+ * @apiParam (Body) {String} email Email of the User.
+ * @apiParam (Body) {String} password Password of the User.
+ *
+ * @apiSuccess (200) {String} token JWT token.
+ *
+ * @apiError (400) {String} error Invalid email or password.
+ * @apiError (500) {String} error Server error.
  */
 router.post(
   "/login",
@@ -124,62 +56,16 @@ router.post(
 );
 
 /**
- * @swagger
- * /forgot-password:
- *   post:
- *     summary: Send OTP code for password reset
- *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - email
- *             properties:
- *               email:
- *                 type: string
- *                 format: email
- *                 example: johndoe@example.com
- *         application/xml:
- *           schema:
- *             type: object
- *             required:
- *               - email
- *             properties:
- *               email:
- *                 type: string
- *                 format: email
- *                 example: johndoe@example.com
- *     responses:
- *       200:
- *         description: OTP code has been sent to your email
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/SuccessResponse'
- *           application/xml:
- *             schema:
- *               $ref: '#/components/schemas/SuccessResponse'
- *       400:
- *         description: Invalid email or not registered
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *           application/xml:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *           application/xml:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
+ * @api {post} /auth/forgot-password Send OTP code for password reset
+ * @apiName ForgotPassword
+ * @apiGroup Auth
+ *
+ * @apiParam (Body) {String} email Email of the User.
+ *
+ * @apiSuccess (200) {String} message OTP code has been sent to your email.
+ *
+ * @apiError (400) {String} error Invalid email or not registered.
+ * @apiError (500) {String} error Server error.
  */
 router.post(
   "/forgot-password",
@@ -188,74 +74,17 @@ router.post(
 );
 
 /**
- * @swagger
- * /confirm-otp:
- *   post:
- *     summary: Confirm OTP code for password reset
- *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - otp
- *             properties:
- *               otp:
- *                 type: string
- *                 example: "123456"
- *         application/xml:
- *           schema:
- *             type: object
- *             required:
- *               - otp
- *             properties:
- *               otp:
- *                 type: string
- *                 example: "123456"
- *     responses:
- *       200:
- *         description: OTP confirmed and reset token issued
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: OTP confirmed. Use the reset token to set a new password.
- *                 resetToken:
- *                   type: string
- *                   example: your_reset_token_here
- *           application/xml:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: OTP confirmed. Use the reset token to set a new password.
- *                 resetToken:
- *                   type: string
- *                   example: your_reset_token_here
- *       400:
- *         description: Invalid or expired OTP
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *           application/xml:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *           application/xml:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
+ * @api {post} /auth/confirm-otp Confirm OTP code for password reset
+ * @apiName ConfirmOtp
+ * @apiGroup Auth
+ *
+ * @apiParam (Body) {String} otp OTP code.
+ *
+ * @apiSuccess (200) {String} message OTP confirmed. Use the reset token to set a new password.
+ * @apiSuccess (200) {String} resetToken Reset token.
+ *
+ * @apiError (400) {String} error Invalid or expired OTP.
+ * @apiError (500) {String} error Server error.
  */
 router.post(
   "/confirm-otp",
@@ -268,70 +97,17 @@ router.post(
 );
 
 /**
- * @swagger
- * /set-new-password:
- *   post:
- *     summary: Set new password using reset token
- *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - resetToken
- *               - newPassword
- *             properties:
- *               resetToken:
- *                 type: string
- *                 example: your_reset_token_here
- *               newPassword:
- *                 type: string
- *                 format: password
- *                 example: NewStrongP@ssw0rd
- *         multipart/form-data:
- *           schema:
- *             type: object
- *             required:
- *               - resetToken
- *               - newPassword
- *             properties:
- *               resetToken:
- *                 type: string
- *                 example: your_reset_token_here
- *               newPassword:
- *                 type: string
- *                 format: password
- *                 example: NewStrongP@ssw0rd
- *     responses:
- *       200:
- *         description: Password has been successfully reset
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/SuccessResponse'
- *           application/xml:
- *             schema:
- *               $ref: '#/components/schemas/SuccessResponse'
- *       400:
- *         description: Invalid or expired reset token, or validation failed
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *           application/xml:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *           application/xml:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
+ * @api {post} /auth/set-new-password Set new password using reset token
+ * @apiName SetNewPassword
+ * @apiGroup Auth
+ *
+ * @apiParam (Body) {String} resetToken Reset token.
+ * @apiParam (Body) {String} newPassword New password.
+ *
+ * @apiSuccess (200) {String} message Password has been successfully reset.
+ *
+ * @apiError (400) {String} error Invalid or expired reset token, or validation failed.
+ * @apiError (500) {String} error Server error.
  */
 router.post(
   "/set-new-password",
@@ -345,93 +121,21 @@ router.post(
 );
 
 /**
- * @swagger
- * /change-password:
- *   post:
- *     summary: Change password for authenticated users
- *     tags: [Auth]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - oldPassword
- *               - confirmOldPassword
- *               - newPassword
- *             properties:
- *               oldPassword:
- *                 type: string
- *                 format: password
- *                 example: OldP@ssw0rd
- *               confirmOldPassword:
- *                 type: string
- *                 format: password
- *                 example: OldP@ssw0rd
- *               newPassword:
- *                 type: string
- *                 format: password
- *                 example: NewStrongP@ssw0rd
- *         multipart/form-data:
- *           schema:
- *             type: object
- *             required:
- *               - oldPassword
- *               - confirmOldPassword
- *               - newPassword
- *             properties:
- *               oldPassword:
- *                 type: string
- *                 format: password
- *                 example: OldP@ssw0rd
- *               confirmOldPassword:
- *                 type: string
- *                 format: password
- *                 example: OldP@ssw0rd
- *               newPassword:
- *                 type: string
- *                 format: password
- *                 example: NewStrongP@ssw0rd
- *     responses:
- *       200:
- *         description: Password has been successfully changed
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/SuccessResponse'
- *           application/xml:
- *             schema:
- *               $ref: '#/components/schemas/SuccessResponse'
- *       400:
- *         description: Validation failed, incorrect old password, or passwords do not match
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *           application/xml:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *       401:
- *         description: Unauthorized or invalid token
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *           application/xml:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *           application/xml:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
+ * @api {post} /auth/change-password Change password for authenticated users
+ * @apiName ChangePassword
+ * @apiGroup Auth
+ *
+ * @apiHeader {String} Authorization Bearer token.
+ *
+ * @apiParam (Body) {String} oldPassword Old password.
+ * @apiParam (Body) {String} confirmOldPassword Confirm old password.
+ * @apiParam (Body) {String} newPassword New password.
+ *
+ * @apiSuccess (200) {String} message Password has been successfully changed.
+ *
+ * @apiError (400) {String} error Validation failed, incorrect old password, or passwords do not match.
+ * @apiError (401) {String} error Unauthorized or invalid token.
+ * @apiError (500) {String} error Server error.
  */
 router.post(
   "/change-password",
@@ -453,50 +157,17 @@ router.post(
 );
 
 /**
- * @swagger
- * /delete-account:
- *   delete:
- *     summary: Delete user account
- *     tags: [Auth]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: Account has been successfully deleted
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/SuccessResponse'
- *           application/xml:
- *             schema:
- *               $ref: '#/components/schemas/SuccessResponse'
- *       401:
- *         description: Unauthorized or invalid token
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *           application/xml:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *       404:
- *         description: User not found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *           application/xml:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *           application/xml:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
+ * @api {delete} /auth/delete-account Delete user account
+ * @apiName DeleteAccount
+ * @apiGroup Auth
+ *
+ * @apiHeader {String} Authorization Bearer token.
+ *
+ * @apiSuccess (200) {String} message Account has been successfully deleted.
+ *
+ * @apiError (401) {String} error Unauthorized or invalid token.
+ * @apiError (404) {String} error User not found.
+ * @apiError (500) {String} error Server error.
  */
 router.delete("/delete-account", authMiddleware, authController.deleteAccount);
 

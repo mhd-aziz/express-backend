@@ -1,50 +1,8 @@
 # Node.js Dependencies
 node_modules/
-jspm_packages/
-src/swagger.js
-
-# Logs
 logs/
 *.log
-
-# Environment Variables
 .env
-
-# Prisma
-prisma/.env
-prisma/migrations/
-prisma/dev.db
-
-# Build directories
-dist/
-build/
-out/
-public/
-
-# Temporary Files
-tmp/
-temp/
-*.tmp
-*.temp
-
-# OS Specific Files
-.DS_Store
-Thumbs.db
-ehthumbs.db
-Icon?
-Desktop.ini
-
-# IDEs and Editors
+prisma/
 .vscode/
 .idea/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-# Ignored Scripts or Secrets
-secret/
-secrets/
-*.secret.js
-*.key.js
