@@ -14,19 +14,34 @@ provider = "prisma-client-js"
 }
 
 model User {
-id Int @id @default(autoincrement())
-username String @unique
-email String @unique
-password String
-createdAt DateTime @default(now())
-updatedAt DateTime @updatedAt
-PasswordReset PasswordReset?
+  id            Int             @id @default(autoincrement())
+  username      String          @unique
+  email         String          @unique
+  password      String
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  PasswordReset PasswordReset?
 }
 
 model PasswordReset {
-id Int @id @default(autoincrement())
-otp String
-user User @relation(fields: [userId], references: [id])
-userId Int @unique
-expiresAt DateTime
+  id        Int      @id @default(autoincrement())
+  otp       String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int      @unique
+  expiresAt DateTime
+}
+
+
+model Employee {
+  id          Int      @id @default(autoincrement())
+  firstName   String
+  lastName    String
+  email       String   @unique
+  phoneNumber String?
+  hireDate    DateTime
+  jobTitle    String?
+  department  String?
+  salary      Float?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
