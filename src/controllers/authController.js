@@ -1,10 +1,6 @@
-// src/controllers/authController.js
 const authService = require("../services/authService");
 const { sendErrorResponse } = require("../utils/errorUtils");
 
-/**
- * Register User Controller
- */
 const register = async (req, res, next) => {
   try {
     const result = await authService.registerUser(req.body);
@@ -18,9 +14,6 @@ const register = async (req, res, next) => {
   }
 };
 
-/**
- * Login User Controller
- */
 const login = async (req, res, next) => {
   try {
     const token = await authService.loginUser(req.body);
@@ -34,9 +27,6 @@ const login = async (req, res, next) => {
   }
 };
 
-/**
- * Forgot Password Controller
- */
 const forgotPassword = async (req, res, next) => {
   try {
     const result = await authService.forgotPassword(req.body.email);
@@ -50,9 +40,6 @@ const forgotPassword = async (req, res, next) => {
   }
 };
 
-/**
- * Confirm OTP Controller
- */
 const confirmOtp = async (req, res, next) => {
   try {
     const result = await authService.confirmOtp(req.body.otp);
@@ -66,9 +53,6 @@ const confirmOtp = async (req, res, next) => {
   }
 };
 
-/**
- * Set New Password Controller
- */
 const setNewPassword = async (req, res, next) => {
   try {
     const { resetToken, newPassword } = req.body;
@@ -83,9 +67,6 @@ const setNewPassword = async (req, res, next) => {
   }
 };
 
-/**
- * Change Password Controller
- */
 const changePassword = async (req, res, next) => {
   try {
     const { oldPassword, confirmOldPassword, newPassword } = req.body;
@@ -108,9 +89,6 @@ const changePassword = async (req, res, next) => {
   }
 };
 
-/**
- * Delete Account Controller
- */
 const deleteAccount = async (req, res, next) => {
   try {
     const userId = req.user.userId;

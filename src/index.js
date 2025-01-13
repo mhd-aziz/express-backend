@@ -1,11 +1,10 @@
-// src/index.js
 require("dotenv").config();
 const express = require("express");
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
 const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
-const employeeRoutes = require("./routes/employeeRoutes"); // Tambahkan ini
+const employeeRoutes = require("./routes/employeeRoutes");
 const prisma = require("./prisma");
 const errorHandler = require("./middleware/errorHandler");
 const morgan = require("morgan");
@@ -14,14 +13,12 @@ const enforce = require("express-sslify");
 
 const app = express();
 
-// Logging dengan morgan dan winston
 app.use(
   morgan("combined", {
     stream: { write: (message) => logger.info(message.trim()) },
   })
 );
 
-// Konfigurasi CORS
 app.use(
   cors({
     origin: process.env.CORS_ORIGIN || "http://localhost:5000",
@@ -31,10 +28,8 @@ app.use(
   })
 );
 
-// Middleware untuk parsing JSON
 app.use(express.json({ limit: "10kb", type: ["application/json"] }));
 
-// Konfigurasi Helmet untuk keamanan
 app.use(
   helmet({
     contentSecurityPolicy: {
@@ -63,15 +58,13 @@ app.use(
   })
 );
 
-// Enforce HTTPS di lingkungan produksi
 if (process.env.NODE_ENV === "production") {
   app.use(enforce.HTTPS({ trustProtoHeader: true }));
 }
 
-// Rate Limiting Global
 const globalLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 menit
-  max: 1000, // Maksimum 1000 request per IP per windowMs
+  windowMs: 15 * 60 * 1000,
+  max: 1000,
   message: {
     status: 429,
     message: "Too many requests from this IP, please try again later.",
@@ -81,10 +74,9 @@ const globalLimiter = rateLimit({
 });
 app.use(globalLimiter);
 
-// Rate Limiting khusus Auth Routes
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100, // Maksimum 100 request per IP per windowMs untuk auth routes
+  max: 100,
   message: {
     status: 429,
     message: "Too many requests from this IP, please try again later.",
@@ -94,18 +86,14 @@ const authLimiter = rateLimit({
 });
 app.use("/auth", authLimiter, authRoutes);
 
-// Gunakan Router Pegawai
 app.use("/employees", employeeRoutes);
 
-// Route dasar
 app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-// Middleware Error Handling
 app.use(errorHandler);
 
-// Menjalankan Server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, "0.0.0.0", () => {
   console.log(
@@ -113,7 +101,6 @@ app.listen(PORT, "0.0.0.0", () => {
   );
 });
 
-// Koneksi Prisma
 prisma
   .$connect()
   .then(() => {
@@ -124,7 +111,6 @@ prisma
     process.exit(1);
   });
 
-// Shutdown Handler
 const shutdown = async () => {
   await prisma.$disconnect();
   logger.info("Prisma disconnected. Shutting down.");

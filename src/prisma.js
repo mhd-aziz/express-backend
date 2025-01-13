@@ -1,4 +1,3 @@
-// src/prisma.js
 const { PrismaClient } = require("@prisma/client");
 require("dotenv").config();
 

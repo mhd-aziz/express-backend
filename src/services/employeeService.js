@@ -1,29 +1,17 @@
-// src/services/employeeService.js
 const prisma = require('../prisma');
 
-/**
- * Get All Employees
- */
 const getAllEmployees = async () => {
     return await prisma.employee.findMany({
         orderBy: { id: 'asc' },
     });
 };
 
-/**
- * Get Employee By ID
- * @param {number} id - Employee ID
- */
 const getEmployeeById = async (id) => {
     return await prisma.employee.findUnique({
         where: { id },
     });
 };
 
-/**
- * Create New Employee
- * @param {Object} data - Employee data
- */
 const createEmployee = async (data) => {
     return await prisma.employee.create({
         data: {
@@ -39,17 +27,11 @@ const createEmployee = async (data) => {
     });
 };
 
-/**
- * Update Employee
- * @param {number} id - Employee ID
- * @param {Object} data - Employee data to update
- */
 const updateEmployee = async (id, data) => {
-    // Cek apakah pegawai ada
     const existingEmployee = await prisma.employee.findUnique({ where: { id } });
     if (!existingEmployee) {
         const error = new Error('Employee not found');
-        error.code = 'P2025'; // Prisma error code for not found
+        error.code = 'P2025';
         throw error;
     }
 
@@ -68,10 +50,6 @@ const updateEmployee = async (id, data) => {
     });
 };
 
-/**
- * Delete Employee
- * @param {number} id - Employee ID
- */
 const deleteEmployee = async (id) => {
     return await prisma.employee.delete({
         where: { id },

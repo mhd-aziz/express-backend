@@ -1,10 +1,5 @@
-// src/middleware/errorHandler.js
 const { sendErrorResponse } = require("../utils/errorUtils");
 const logger = require("../utils/logger");
-
-/**
- * Global Error Handling Middleware
- */
 const errorHandler = (err, req, res, next) => {
 
   logger.error(err.stack || err, {
