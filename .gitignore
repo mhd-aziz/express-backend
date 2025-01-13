@@ -1,7 +1,6 @@
-# Node.js Dependencies
 node_modules/
 logs/
-*.log
+migrations/
 .env
 prisma/
 .vscode/
