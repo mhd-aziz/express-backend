@@ -1,4 +1,3 @@
-require("dotenv").config();
 const express = require("express");
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
@@ -10,8 +9,24 @@ const errorHandler = require("./middleware/errorHandler");
 const morgan = require("morgan");
 const logger = require("./utils/logger");
 const enforce = require("express-sslify");
-
 const app = express();
+
+app.set('trust proxy', 1);
+
+const getClientIp = (req) => {
+  const ip = req.ip;
+  
+  if (ip === '::1') return '127.0.0.1';
+  
+  const parts = ip.split(':');
+  
+  if (parts.length > 1 && parts[parts.length - 1].length <= 5) {
+    parts.pop();
+    return parts.join(':');
+  }
+  
+  return ip;
+};
 
 app.use(
   morgan("combined", {
@@ -71,6 +86,10 @@ const globalLimiter = rateLimit({
   },
   standardHeaders: true,
   legacyHeaders: false,
+  keyGenerator: getClientIp,
+  handler: (req, res) => {
+    res.status(429).json({ message: 'Too many requests, please try again later.' });
+  },
 });
 app.use(globalLimiter);
 
@@ -83,6 +102,10 @@ const authLimiter = rateLimit({
   },
   standardHeaders: true,
   legacyHeaders: false,
+  keyGenerator: getClientIp,
+  handler: (req, res) => {
+    res.status(429).json({ message: 'Too many requests, please try again later.' });
+  },
 });
 app.use("/auth", authLimiter, authRoutes);
 
